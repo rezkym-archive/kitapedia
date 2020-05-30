@@ -1,0 +1,26 @@
+# Node Modules
+/node_modules
+
+# Public State
+/public/hot
+/public/storage
+
+# Storage State
+/storage/*.key
+
+# Template State
+/template
+
+# Vendor State
+/vendor
+
+# Env State
+.env
+.env.backup
+
+# Another State
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
