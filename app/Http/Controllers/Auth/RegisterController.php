@@ -49,11 +49,35 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        /**
+         * Message for errors
+         */
+        $messages = 
+        [
+            /* Custome */
+            'agree.required'    => 'Kamu harus menyetujui syarat dan ketentuan',
+            'nohp.regex'        => 'Harap menggunakan nomor telefon Indonesia',
+            
+            /* Static */
+            'required'  => ':attribute tidak boleh kosong.',
+            'string'    => 'Terdapat karakter yang di larang pada :attribute.',
+            'min'       => 'Jumlah karakter :attribute minimal :min.',
+            'max'       => 'Jumlah karakter :attribute maksimal :max.',
+            'confirmed' => 'Konfirmasi :attribute tidak cocok.',
+        ];
+
+        /**
+         * Check the errors
+         */
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+            'name'                      => ['required', 'string', 'min:5', 'max:255'],
+            'username'                  => ['required', 'string', 'min:4', 'max:35', 'unique:users'],
+            'email'                     => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'nohp'                      => ['required', 'string', 'max:15', 'regex:/^(^\+62\s?|^0)(\d{3,4}-?){2}\d{3,4}$/', 'unique:users'],
+            'password'                  => ['required', 'string', 'min:5', 'confirmed'],
+            'password_confirmation'     => ['required', 'string', 'min:5'],
+            'agree'                     => ['required']
+        ], $messages);
     }
 
     /**
@@ -65,9 +89,11 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'name'              => $data['name'],
+            'username'          => $data['username'],
+            'email'             => $data['email'],
+            'nohp'              => $data['nohp'],
+            'password'          => Hash::make($data['password']),
         ]);
     }
 }
