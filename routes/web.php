@@ -13,10 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/**
+ * Landing Page Route
+ */
 Route::get('/', function () {
     return view('welcome');
 });
 
+/**
+ * Auth Route
+ */
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+/**
+ * Dashboard / Home
+ */
+//Route::get('/home', 'HomeController@index')->name('home');
