@@ -13,19 +13,57 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/**
- * Landing Page Route
- */
-Route::get('/', function () {
-    return view('welcome');
+/* Landing Route */
+Route::get('/', function () { 
+    if(auth()->check()) return redirect('/'.auth()->user()->role);
+    return view('/auth/login'); 
+});
+Route::get('/home', function () {
+    if (!auth()->check()) return redirect('/');
+    $role = auth()->user()->role;
+    return redirect()->route($role . '.home');
+})->name('home');
+
+
+/* Auth Routes */
+Route::group([
+    'prefix' => ''
+], function () {
+    Route::get('setting', 'Auth\SettingController@index')->name('auth.setting');
+    Route::put('setting', 'Auth\SettingController@update')->name('auth.setting.update');
+    Auth::routes();
 });
 
-/**
- * Auth Route
- */
-Auth::routes();
 
-/**
- * Dashboard / Home
- */
-//Route::get('/home', 'HomeController@index')->name('home');
+/* Admin Routes */
+Route::group([
+    'middleware'    => ['auth', 'role:admin'], 
+    'prefix'        => 'admin',
+    'namespace'     => 'Admin',
+    'as'            => 'admin.',
+], function () {
+    Route::get('/', 'HomeController@index')->name('home');
+    Route::resource('/user', 'UserController@index');
+}); 
+
+
+/* Reseller Routes */
+Route::group([
+    'middleware'    => ['auth', 'role:reseller'],
+    'prefix'        => 'reseller',
+    'namespace'     => 'Reseller', 
+    'as'            => 'reseller.',
+], function () {
+    Route::get('/', 'HomeController@index')->name('home');
+});
+
+
+/* User Routes */
+Route::group([
+    'middleware'    => ['auth', 'role:client'],
+    'prefix'        => 'client',
+    'namespace'     => 'Client',
+    'as'            => 'client.',
+], function () {
+    Route::get('/', 'HomeController@index')->name('home');
+});
