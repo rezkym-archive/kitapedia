@@ -118,7 +118,7 @@ class LoginController extends Controller
              * If Login successfuly, redirect to dashboard
              */
             $user = auth()->user();
-            $home = route($user->role . '.home');
+            $home = route($user->role . '.index');
             return redirect()->intended($home);
         }
 
