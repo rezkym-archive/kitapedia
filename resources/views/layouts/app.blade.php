@@ -5,13 +5,14 @@
         <meta charset="UTF-8">
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
 
-        <title> @yield('title_head') </title>
+        <title> @yield('title_head') - {{ env('APP_NAME') }} </title>
 
         <!-- General CSS Files -->
         <link rel="stylesheet" href="{{ asset('assets/modules/bootstrap/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/modules/fontawesome/css/all.min.css') }}">
 
         <!-- CSS Libraries -->
+        @stack('css_lib')
 
         <!-- Template CSS -->
         <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
@@ -25,10 +26,10 @@
 
     </head>
 
-    <body>
-        <div id="app">
-            <div class="main-wrapper main-wrapper-1">
-                <div class="navbar-bg"></div>
+    <body class="dark-mode">
+        <div  id="app">
+            <div class="main-wrapper main-wrapper-1 ">
+                <div class="navbar-bg "></div>
                 
                 <!--======================================
                     =========== Start Top Bar ============
@@ -93,8 +94,13 @@
         <script src="{{ asset('assets/js/stisla.js') }}"></script>
 
         <!-- JS Libraies -->
+        @stack('js_lib')
 
         <!-- Page Specific JS File -->
+        @stack('js_specific')
+
+        <!-- Javascript in HTML Code -->
+        @stack('js_html')
 
         <!-- Template JS File -->
         <script src="{{ asset('assets/js/scripts.js') }}"></script>
