@@ -61,6 +61,11 @@
   box-shadow: none !important;
   outline: none; }
 
+  .dark-mode
+  {
+    background-color: #E9ECEF;
+  }
+
 a {
   color: #6777ef;
   font-weight: 500;
@@ -2322,7 +2327,7 @@ pre {
   top: 0;
   height: 100%;
   width: 250px;
-  background-color: #fff;
+  background-color: #efefef;
   z-index: 880;
   left: 0; }
 
@@ -2606,7 +2611,7 @@ body.layout-3 .main-footer {
     display: block; }
     .main-sidebar .sidebar-menu li.menu-header {
       padding: 3px 15px;
-      color: #bcc1c6;
+      color: #000000;
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 1.3px;
@@ -2732,7 +2737,7 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu > li.active > a {
     background-color: #6777ef; }
 body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-menu li a {
   padding-left: 61px;
-  background-color: #fff; }
+  background-color: #efefef; }
 
 @media (max-width: 1024px) {
   .sidebar-gone-hide {
