@@ -26,13 +26,14 @@ Route::get('/home', function () {
 
 
 /* Auth Routes */
-Route::group([
+Auth::routes();
+/* Route::group([
     'prefix' => ''
 ], function () {
     Route::get('setting', 'Auth\SettingController@index')->name('auth.setting');
     Route::put('setting', 'Auth\SettingController@update')->name('auth.setting.update');
-    Auth::routes();
-});
+    
+}); */
 
 
 /* Admin Routes */
@@ -42,28 +43,28 @@ Route::group([
     'namespace'     => 'Admin',
     'as'            => 'admin.',
 ], function () {
-    Route::get('/', 'HomeController@index')->name('home');
+    Route::resource('/', 'HomeController');
     Route::resource('/user', 'UserController@index');
 }); 
 
 
 /* Reseller Routes */
-Route::group([
+/* Route::group([
     'middleware'    => ['auth', 'role:reseller'],
     'prefix'        => 'reseller',
     'namespace'     => 'Reseller', 
     'as'            => 'reseller.',
 ], function () {
     Route::get('/', 'HomeController@index')->name('home');
-});
+}); */
 
 
 /* User Routes */
-Route::group([
+/* Route::group([
     'middleware'    => ['auth', 'role:client'],
     'prefix'        => 'client',
     'namespace'     => 'Client',
     'as'            => 'client.',
 ], function () {
     Route::get('/', 'HomeController@index')->name('home');
-});
+}); */
