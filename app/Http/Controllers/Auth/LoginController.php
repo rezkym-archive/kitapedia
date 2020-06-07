@@ -58,20 +58,27 @@ class LoginController extends Controller
     {
         /** 
          * Request Credentials
+         * 
+         * @return string
          */
         $username   = $request->username;
         $email      = $request->username;
         $password   = $request->password;
+        $remember   = ($request->remember) ? $request->remember : '';
         $isEmail    = filter_var($email, FILTER_VALIDATE_EMAIL);
 
         /**
          * Get Account From Database
+         * 
+         * @return array
          */
         $getByEmail     = User::whereEmail($email)->first();
         $getByUsername  = User::whereUsername($username)->first();
 
         /**
          * Get Account Status
+         * 
+         * @return array
          */
         $userStatus = $this->checkStatusAccount($username);
 
@@ -80,6 +87,8 @@ class LoginController extends Controller
          * 
          * withError
          * this function is use key name="username" in login.blade.php
+         * 
+         * @return x
          */
         if($getByEmail == false AND $isEmail == true)
         {
@@ -104,14 +113,22 @@ class LoginController extends Controller
 
         } else 
         {
-            $loginUsing = ($getByEmail) ? $email : $username;
-            $loginKey   = ($getByEmail) ? 'email' : 'username';
+            /**
+             * if the login is successful, then restore
+             * loginKey using (email or username) and 
+             * loginUsingValue or login value using (email or username)
+             * 
+             * @return string
+             */
+            $loginUsingValue    = ($getByEmail) ? $email : $username;
+            $loginKey           = ($getByEmail) ? 'email' : 'username';
+
         }
 
         /**
          * Login Process
          */
-        if (Auth::attempt([$loginKey => $loginUsing, 'password' => $password])) 
+        if (Auth::attempt([$loginKey => $loginUsingValue, 'password' => $password], $remember)) 
         {
             
             /**
@@ -120,7 +137,8 @@ class LoginController extends Controller
             $user = auth()->user();
             $home = route($user->role . '.index');
             return redirect()->intended($home);
-        }
+
+        } 
 
         /**
          * If failed to login turn back to login form
