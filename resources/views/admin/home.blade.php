@@ -17,7 +17,7 @@
 @push('js_lib')
 
         <script src="{{ asset('assets/modules/jquery.sparkline.min.js') }}"></script>
-        <script src="{{ asset('assets/modules/chart.min.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2/dist/Chart.min.js"></script>
         <script src="{{ asset('assets/modules/owlcarousel2/dist/owl.carousel.min.js') }}"></script>
         <script src="{{ asset('assets/modules/summernote/summernote-bs4.js') }}"></script>
         <script src="{{ asset('assets/modules/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
@@ -33,6 +33,7 @@
 
 {{-- Content Section --}}
 @section('content')
+
                 <!-- Main Content -->
                 <div class="main-content">
                     <section class="section">
@@ -68,7 +69,7 @@
                                         <div class="card-wrap">
                                             <div class="card-header">
                                                 <h4> Pendapatan </h4> </div>
-                                            <div class="card-body"> {{ $totalSales }} </div>
+                                            <div class="card-body"> {{ $totalSales['allSales'] }} </div>
                                         </div>
                                     </div>
                                 </div>
@@ -81,7 +82,7 @@
                                         <div class="card-wrap">
                                             <div class="card-header">
                                                 <h4> Sosmed </h4> </div>
-                                            <div class="card-body"> 3.000 rb </div>
+                                            <div class="card-body"> {{ $totalSales['sosmedSales'] }} </div>
                                         </div>
                                     </div>
                                 </div>
@@ -93,11 +94,11 @@
                                         <div class="card-icon shadow-primary bg-primary"> <i class="fas fa-shopping-bag"></i> </div>
                                         <div class="card-wrap">
                                             <div class="card-header">
-                                                <h4> Sosmed </h4> 
+                                                <h4> PPOB </h4> 
                                             </div>
 
                                             <div class="card-body"> 
-                                                1.000 rb 
+                                                {{ $totalSales['ppobSales'] }}
                                             </div>
                                         </div>
                                     </div>
@@ -111,7 +112,9 @@
                                         </div>
 
                                         <div class="card-body">
-                                            <canvas id="salesChart" height="158"></canvas>
+
+                                            {!! $transactionChart->container() !!}
+
                                         </div>
                                     </div>
                                 </div>
@@ -139,21 +142,21 @@
                                         <div class="card-body" id="top-5-scroll">
                                             <ul class="list-unstyled list-unstyled-border">
                                                 
-                                                @foreach ($transactionUser as $trx_ppob)
+                                                @foreach ($transactionUser as $trx)
 
                                                     <li class="media"> <img class="mr-3 rounded" width="55" src="assets/img/products/product-3-50.png" alt="product">
                                                         <div class="media-body">
                                                             <div class="float-right">
-                                                                <div class="font-weight-600 text-muted text-small"> 86 Sales </div>
+                                                                <div class="font-weight-600 text-muted text-small"> {{ date('d/m/y', strtotime($trx->created_at)) }} </div>
                                                             </div>
 
                                                             <div class="media-title"> 
                                                                 
-                                                                {{ $trx_ppob->username }} 
+                                                                {{ $trx->username }} 
                                                                 - 
-                                                                {{ $trx_ppob->type }}
+                                                                {{ $trx->type }}
                                                                 - 
-                                                                {{ $trx_ppob->status }}
+                                                                {{ $trx->status }}
                                                             </div>
                                                             
                                                         </div>
@@ -176,78 +179,92 @@
                                     </div>
                                 </div>
                             </div>
-                        
 
                         <div class="section-body">
                         </div>
                     </section>
-                </div>
+                </div>              
+
 @endsection
 
 {{-- Javascript in HTML Code --}}
 @push('js_html')
+
+                <!-- Chart script -->
+                {!! $transactionChart->script() !!}
     
                 <script type="text/javascript">
                     "use strict";
 
-                    var ctx = document.getElementById("salesChart").getContext('2d');
-                    var salesChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ["January", "February", "March", "April", "May", "June", "July", "August"],
-                        datasets: [{
-                        label: 'Sales',
-                        data: [3200, 1800, 4305, 3022, 6310, 5120, 5880, 6154],
-                        borderWidth: 2,
-                        backgroundColor: 'rgba(63,82,227,.8)',
-                        borderWidth: 0,
-                        borderColor: 'transparent',
-                        pointBorderWidth: 0,
-                        pointRadius: 3.5,
-                        pointBackgroundColor: 'transparent',
-                        pointHoverBackgroundColor: 'rgba(63,82,227,.8)',
-                        },
-                        {
-                        label: 'Budget',
-                        data: [2207, 3403, 2200, 5025, 2302, 4208, 3880, 4880],
-                        borderWidth: 2,
-                        backgroundColor: 'rgba(254,86,83,.7)',
-                        borderWidth: 0,
-                        borderColor: 'transparent',
-                        pointBorderWidth: 0 ,
-                        pointRadius: 3.5,
-                        pointBackgroundColor: 'transparent',
-                        pointHoverBackgroundColor: 'rgba(254,86,83,.8)',
-                        }]
-                    },
-                    options: {
-                        legend: {
-                        display: false
-                        },
-                        scales: {
-                        yAxes: [{
-                            gridLines: {
-                            // display: false,
-                            drawBorder: false,
-                            color: '#f2f2f2',
+                        /* var ctx = document.getElementById("salesChart").getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'],
+                                datasets: [{
+                                    label: 'PPOB',
+                                    fill: true,
+                                    backgroundColor: 'rgb(30, 227, 207, 0.1)',
+                                    borderColor: 'rgb(30, 227, 207)',
+                                    pointRadius: 3.5,
+                                    pointBackgroundColor: 'transparent',
+                                    pointHoverBackgroundColor: 'rgba(30, 227, 207, .8)',
+                                    data: [
+                                        24,
+                                        31,
+                                        15,
+                                        18,
+                                        20,
+                                        10,
+                                        40
+                                    ]
+                                }, 
+                                {
+                                    label: 'SOSMED',
+                                    fill: true,
+                                    backgroundColor: 'rgb(255, 99, 132, 0.1)',
+                                    borderColor: 'rgb(255, 99, 132)',
+                                    pointRadius: 3.5,
+                                    pointBackgroundColor: 'transparent',
+                                    pointHoverBackgroundColor: 'rgba(255, 99, 132, .8)',
+                                    data: [
+                                        10,
+                                        14,
+                                        18,
+                                        17,
+                                        21,
+                                        24,
+                                        13
+                                    ],
+                                }],
                             },
-                            ticks: {
-                            beginAtZero: true,
-                            stepSize: 1500,
-                            callback: function(value, index, values) {
-                                return '$' + value;
-                            }
-                            }
-                        }],
-                        xAxes: [{
-                            gridLines: {
-                            display: false,
-                            tickMarkLength: 15,
-                            }
-                        }]
-                        },
-                    }
-                    });
+                            options: {
+                                legend: {
+                                    display: true
+                                },
+                                scales: {
+                                    yAxes: [{
+                                        stacked: false,
+                                        gridLines: 
+                                        {
+                                            display: true,
+                                            drawBorder: true,
+                                            color: '#f2f2f2',
+                                        },
+                                        ticks: {
+                                            beginAtZero: true,
+                                        }
+                                    }],
+                                    xAxes: [{
+                                        gridLines: {
+                                            display: true,
+                                            tickMarkLength: 15,
+                                        }
+                                    }]
+                            },
+                        }
+                    }); */
+
 
                     var balance_chart = document.getElementById("balance-chart").getContext('2d');
 
@@ -258,7 +275,7 @@
                     var salesChart = new Chart(balance_chart, {
                     type: 'line',
                     data: {
-                        labels: ['16-07-2018', '17-07-2018', '18-07-2018', '19-07-2018', '20-07-2018', '21-07-2018', '22-07-2018', '23-07-2018', '24-07-2018', '25-07-2018', '26-07-2018', '27-07-2018', '28-07-2018', '29-07-2018', '30-07-2018', '31-07-2018'],
+                        labels: ['16-07', '17-07', '18-07', '19-07', '20-07', '21-07', '22-07', '23-07', '24-07', '25-07', '26-07', '27-07', '28-07', '29-07', '30-07', '31-07'],
                         datasets: [{
                         label: 'Balance',
                         data: [50, 61, 80, 50, 72, 52, 60, 41, 30, 45, 70, 40, 93, 63, 50, 62],
@@ -315,7 +332,7 @@
                     var salesChart = new Chart(sales_chart, {
                     type: 'line',
                     data: {
-                        labels: ['16-07-2018', '17-07-2018', '18-07-2018', '19-07-2018', '20-07-2018', '21-07-2018', '22-07-2018', '23-07-2018', '24-07-2018', '25-07-2018', '26-07-2018', '27-07-2018', '28-07-2018', '29-07-2018', '30-07-2018', '31-07-2018'],
+                        labels: ['16-07', '17-07', '18-07', '19-07', '20-07', '21-07', '22-07', '23-07', '24-07', '25-07', '26-07', '27-07', '28-07', '29-07', '30-07', '31-07'],
                         datasets: [{
                         label: 'Sales',
                         data: [70, 62, 44, 40, 21, 63, 82, 52, 50, 31, 70, 50, 91, 63, 51, 60],
@@ -382,5 +399,6 @@
                         }
                     }
                     });
+
                 </script>
 @endpush

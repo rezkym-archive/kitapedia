@@ -8,7 +8,7 @@
         <title> @yield('title_head') - {{ env('APP_NAME') }} </title>
 
         <!-- General CSS Files -->
-        <link rel="stylesheet" href="{{ asset('assets/modules/bootstrap/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ asset('assets/modules/fontawesome/css/all.min.css') }}">
 
         <!-- CSS Libraries -->
