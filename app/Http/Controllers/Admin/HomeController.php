@@ -29,7 +29,7 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Displays data to the admin main page
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
@@ -37,11 +37,15 @@ class HomeController extends Controller
     {
         /**
          * Static Data
+         * 
+         * @return string
          */
         $username = auth()->user()->username;
 
         /**
          * User Data
+         * 
+         * @return array
          */
         $dataUser = User::where('username', $username)->first();
 
@@ -54,11 +58,15 @@ class HomeController extends Controller
 
         /**
          * Status Transaction
+         * 
+         * @return array
          */
         $transactionStatus = self::orderStatus();
         
         /**
          * Chart transaction
+         * 
+         * @return array
          */
         $transactionChart = self::transactionChart();
 
@@ -66,12 +74,11 @@ class HomeController extends Controller
         /**
          * Transaction
          * 
-         * use transactionPPOB as a parent to transactionSosmed
-         * the relationship is belongsTo
+         * @return array
          */
         $transaction        = transaction::limit(4)
-                                        ->orderBy('created_at', 'desc')
-                                        ->get();
+                            ->orderBy('created_at', 'desc')
+                            ->get();
         $transactionPPOB    = transactionPPOB::all();
         $transactionSosmed  = transactionSosmed::all();
         #dd($transaction[3]->transactionSosmed);
@@ -79,10 +86,11 @@ class HomeController extends Controller
 
         /**
          * Return to admin home
+         * 
+         * @return array
          */
         return view('admin.home', 
         [
-
             'user'              => $dataUser,
             'transactionUser'   => $transaction,
             'totalSales'        => $totalSales,
@@ -90,33 +98,38 @@ class HomeController extends Controller
             'transactionChart'  => $transactionChart,
 
         ]);
+
     }
 
     /**
-     * Count the sales product
+     * Calculate product sales
      * 
      * PPOB
      * Sosmed
+     * 
+     * @return array
      */
     private function sales()
     {
         /**
          * Transaction PPOB
+         * 
+         * @return array
          */
         $countPPOB      = transactionPPOB::select('price')->sum('price');
         $countSosmed    = transactionSosmed::select('price')->sum('price');
         
         /**
          * Addition of both
+         * 
+         * @return integer
          */
         $countOfBoth = $countPPOB + $countSosmed;
 
         /**
-         * Array Sales
+         * Transform to array
          * 
-         * All Sales
-         * PPOB Sales
-         * Sosmed Sales
+         * @return array
          */
         $sales = 
         [
@@ -125,15 +138,28 @@ class HomeController extends Controller
             'sosmedSales'   => currencyIDR::beCalculated($countSosmed),
         ];
 
+        /**
+         * Print data
+         * 
+         * @return array
+         */
         return $sales;
+
     }
 
+    /**
+     * Retrieve order status
+     * 
+     * @return array
+     */
     private static function orderStatus()
     {
             /**
-             * Count Status PPOB
+             * Sum Status PPOB and Sosmed
              * 
              * Success, pending, error
+             * 
+             * @return array
              */
             $transaction = DB::select(DB::raw(
 
@@ -152,36 +178,79 @@ class HomeController extends Controller
             ));
 
             /**
-             * Return back status
+             * Return and print the results
+             * 
+             * @return array
              */
             return $transaction;
 
     }
 
+    /**
+     * Sales chart
+     * 
+     * @return array
+     */
     private static function transactionChart()
     {
-        $chartSosmed = collect([]); // Could also be an array
-        $chartPPOB = collect([]); // Could also be an array
-        $format = collect([]); // Could also be an array
+        /**
+         * Must be an array
+         * 
+         * @return x
+         */
+        $chartSosmed    = collect([]); 
+        $chartPPOB      = collect([]); 
+        $datetimeChange = collect([]); 
 
-        for ($days_backwards = 7; $days_backwards >= 0; $days_backwards--) {
-            // Could also be an array_push if using an array rather than a collection.
-            $chartSosmed->push(transaction::whereDate('created_at', Carbon::tomorrow()
-                                                    ->subDays($days_backwards)
-                                                )
-                                                ->where('type', 'sosmed')
-                                    ->count());
-            $chartPPOB->push(transaction::whereDate('created_at', Carbon::tomorrow()
-                                                    ->subDays($days_backwards)
-                                                )
-                                                ->where('type', 'ppob')
-                                    ->count());
-            $format->push(Carbon::tomorrow()->subDays($days_backwards)->format('d-m'));
+        /**
+         * Take data and sort the date from the previous 7 days
+         * 
+         * @return array
+         */
+        for ($days_backwards = 7; $days_backwards >= 0; $days_backwards--) 
+        {
+            /**
+             * Sosmed Chart variable
+             * 
+             * @return array
+             */
+            $chartSosmed->push(transaction::whereDate('created_at', Carbon::tomorrow()->subDays($days_backwards))
+            ->where('type', 'sosmed')
+            ->count());
+
+            /**
+             * PPOB Chart variable
+             * 
+             * @return array
+             */
+            $chartPPOB->push(transaction::whereDate('created_at', Carbon::tomorrow()->subDays($days_backwards))
+            ->where('type', 'ppob')
+            ->count());
+
+            /**
+             * Change the datetime format
+             * 
+             * @return array
+             */
+            $datetimeChange->push(Carbon::tomorrow()->subDays($days_backwards)->format('d-m'));
+
         }
     
-
+        /* Set transactionChart class */
         $chart = new transactionChart;
-        $chart->labels($format);
+
+        /**
+         * Set labels for chart
+         * 
+         * @return array
+         */
+        $chart->labels($datetimeChange);
+
+        /**
+         * Set the first data
+         * 
+         * @return array
+         */
         $chart->dataset('Sosmed', 'line', $chartSosmed->values())
         ->options([
             'backgroundColor'               => 'rgb(255, 99, 132, .5)',
@@ -191,6 +260,12 @@ class HomeController extends Controller
             'pointBackgroundColor'          => 'transparent',
             'pointHoverBackgroundColor'     => 'rgb(255, 99, 132)',
         ]);
+
+        /**
+         * Set the second data
+         * 
+         * @return array
+         */
         $chart->dataset('PPOB', 'line', $chartPPOB->values())
         ->options([
             'backgroundColor'               => 'rgb(30, 227, 207, .4)',
@@ -238,6 +313,11 @@ class HomeController extends Controller
             ],
         ]); */
 
+        /**
+         * Print chart
+         * 
+         * @return array
+         */
         return $chart;
 
     }

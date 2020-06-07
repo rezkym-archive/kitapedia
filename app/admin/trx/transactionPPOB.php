@@ -11,11 +11,11 @@ class transactionPPOB extends Model
     /* public function user() 
     {
         return $this->belongsTo('App\User');
-    }
+    } */
 
     public function transactionSosmed() 
     {
         return $this->belongsTo('App\admin\trx\transactionSosmed', 'user_id');
-    } */
+    }
 
 }
