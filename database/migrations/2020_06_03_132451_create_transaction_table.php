@@ -15,8 +15,7 @@ class CreateTransactionTable extends Migration
     {
         Schema::create('transaction', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id')->unsigned()->nullable();            
-            $table->foreign('user_id')->references('id')->on('transaction')->onUpdate('set null')->onDelete('set null');
+            $table->bigInteger('user_id')->nullable();
             $table->bigInteger('ppob_id')->nullable(true);
             $table->bigInteger('sosmed_id')->nullable(true);
             $table->string('username', 100)->nullable()->default('text');
