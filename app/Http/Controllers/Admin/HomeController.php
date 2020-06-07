@@ -13,6 +13,8 @@ use App\currencyIDR;
 use App\transaction;
 use App\admin\trx\transactionPPOB;
 use App\admin\trx\transactionSosmed;
+use App\Charts\transactionChart;
+
 
 class HomeController extends Controller
 {
@@ -44,7 +46,9 @@ class HomeController extends Controller
         $dataUser = User::where('username', $username)->first();
 
         /**
-         * Count all Sales
+         * Count all Sales \ function sales()
+         * 
+         * @return array
          */
         $totalSales = $this->sales();
 
@@ -52,6 +56,12 @@ class HomeController extends Controller
          * Status Transaction
          */
         $transactionStatus = self::orderStatus();
+        
+        /**
+         * Chart transaction
+         */
+        $transactionChart = self::transactionChart();
+
 
         /**
          * Transaction
@@ -59,31 +69,27 @@ class HomeController extends Controller
          * use transactionPPOB as a parent to transactionSosmed
          * the relationship is belongsTo
          */
-        #$transactionPPOB    = transactionPPOB::all();
-        #$transactionSosmed  = transactionSosmed::all();
-        $transaction        = transaction::all();
-        //dd($transaction[3]->transactionSosmed);
-
-        #$date = date("Y-m-d H");
-
-        /* $transactionAll = DB::table(DB::raw('transaction_ppob as ppob, transaction_sosmed as sosmed'))
-        ->select(DB::raw('ppob.username as p_username, ppob.service as p_service, sosmed.username as s_username, sosmed.type as s_type'))
-        ->whereDate('ppob.created_at', Carbon::today())
-        ->whereDate('sosmed.created_at', Carbon::today())
-        ->get(); */
+        $transaction        = transaction::limit(4)
+                                        ->orderBy('created_at', 'desc')
+                                        ->get();
+        $transactionPPOB    = transactionPPOB::all();
+        $transactionSosmed  = transactionSosmed::all();
+        #dd($transaction[3]->transactionSosmed);
         
 
         /**
          * Return to admin home
          */
-        return view('admin.home', [
+        return view('admin.home', 
+        [
 
             'user'              => $dataUser,
             'transactionUser'   => $transaction,
             'totalSales'        => $totalSales,
             'trxStatus'         => $transactionStatus,
+            'transactionChart'  => $transactionChart,
 
-            ]);
+        ]);
     }
 
     /**
@@ -106,11 +112,20 @@ class HomeController extends Controller
         $countOfBoth = $countPPOB + $countSosmed;
 
         /**
-         * IDR Currency
+         * Array Sales
+         * 
+         * All Sales
+         * PPOB Sales
+         * Sosmed Sales
          */
-        $toIDR  = currencyIDR::beCalculated($countOfBoth);
+        $sales = 
+        [
+            'allSales'      => currencyIDR::beCalculated($countOfBoth),
+            'ppobSales'     => currencyIDR::beCalculated($countPPOB),
+            'sosmedSales'   => currencyIDR::beCalculated($countSosmed),
+        ];
 
-        return $toIDR;
+        return $sales;
     }
 
     private static function orderStatus()
@@ -140,6 +155,90 @@ class HomeController extends Controller
              * Return back status
              */
             return $transaction;
+
+    }
+
+    private static function transactionChart()
+    {
+        $chartSosmed = collect([]); // Could also be an array
+        $chartPPOB = collect([]); // Could also be an array
+        $format = collect([]); // Could also be an array
+
+        for ($days_backwards = 7; $days_backwards >= 0; $days_backwards--) {
+            // Could also be an array_push if using an array rather than a collection.
+            $chartSosmed->push(transaction::whereDate('created_at', Carbon::tomorrow()
+                                                    ->subDays($days_backwards)
+                                                )
+                                                ->where('type', 'sosmed')
+                                    ->count());
+            $chartPPOB->push(transaction::whereDate('created_at', Carbon::tomorrow()
+                                                    ->subDays($days_backwards)
+                                                )
+                                                ->where('type', 'ppob')
+                                    ->count());
+            $format->push(Carbon::tomorrow()->subDays($days_backwards)->format('d-m'));
+        }
+    
+
+        $chart = new transactionChart;
+        $chart->labels($format);
+        $chart->dataset('Sosmed', 'line', $chartSosmed->values())
+        ->options([
+            'backgroundColor'               => 'rgb(255, 99, 132, .5)',
+            'borderColor'                   => 'rgb(255, 99, 132)',
+            'fill'                          => true,
+            'pointRadius'                   => 3.5,
+            'pointBackgroundColor'          => 'transparent',
+            'pointHoverBackgroundColor'     => 'rgb(255, 99, 132)',
+        ]);
+        $chart->dataset('PPOB', 'line', $chartPPOB->values())
+        ->options([
+            'backgroundColor'               => 'rgb(30, 227, 207, .4)',
+            'borderColor'                   => 'rgb(30, 227, 207)',
+            'fill'                          => true,
+            'pointRadius'                   => 3.5,
+            'pointBackgroundColor'          => 'transparent',
+            'pointHoverBackgroundColor'     => 'rgb(30, 227, 207)',
+        ]);
+
+        /* $chart->options([
+            'legend' =>
+                [
+                    'position' => 'top',
+                    'labels' =>
+                        [
+                            'fontColor' => 'white', 'fontSize' => 16
+                        ]
+                ],
+            'scales' => 
+            [
+                'xAxes' => 
+                [
+                    [
+                        'ticks' => 
+                        [
+                            'fontColor' => 'white',
+                            'backgroundColor' => 'white',
+                            'fontSize' => 16
+                        ]
+                    ],
+                ],
+                'yAxes' => 
+                [
+                    [
+                        'ticks' => 
+                        [
+                            "beginAtZero" => true,
+                            'fontColor' => 'white',
+                            'backgroundColor' => 'white',
+                            'fontSize' => 16
+                        ],
+                    ]
+                ],
+            ],
+        ]); */
+
+        return $chart;
 
     }
 }
