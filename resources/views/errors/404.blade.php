@@ -11,10 +11,13 @@
                     <div class="container mt-5">
                         <div class="page-error">
                             <div class="page-inner">
-                                <h1> 404 </h1>
-                                <div class="page-description"> Whoops halaman tidak ditemukan nihh... </div>
+                                {{-- <h1> 404 </h1> --}}
+                                <img src="https://image.freepik.com/free-vector/error-404-concept-illustration_114360-1811.jpg"/>
+                                <div class="page-description mt-4"> Whoops halaman tidak ditemukan nihh... </div>
                                 <div class="page-search">
-                                    <div class="mt-3"> <a href="/"> Kembali yukk </a> </div>
+                                    <a href="/">
+                                        <div class="btn btn-primary mt-3">  Kembali yukk </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>

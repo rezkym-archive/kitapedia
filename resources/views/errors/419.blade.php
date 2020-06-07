@@ -1,7 +1,7 @@
 @extends('layouts.app_errors')
 
 {{-- Title Head --}}
-@section('title_head', 'Where am i? 500')
+@section('title_head', 'Where am i? 404')
 
 {{-- Content --}}
 @section('content')
@@ -11,11 +11,9 @@
                     <div class="container mt-5">
                         <div class="page-error">
                             <div class="page-inner">
-                                <h1> 500 </h1>
-                                <img src="https://image.freepik.com/free-vector/500-internal-server-error-concept-illustration_114360-1885.jpg"/>
-                                <div class="page-description"> Oh tidakk, kesalahan fatal pada sistem. Yuk hubungi layanan bantuan... </div>
+                                <h1> 419 </h1>
+                                <div class="page-description"> Whoops halaman sudah kedaluarsa, coba segarkan kembalii </div>
                                 <div class="page-search">
-
                                     <div class="mt-3"> <a href="/"> Kembali yukk </a> </div>
                                 </div>
                             </div>
