@@ -83,6 +83,13 @@ class LoginController extends Controller
         $userStatus = $this->checkStatusAccount($username);
 
         /**
+         * Get Account Status
+         * 
+         * @return array
+         */
+        $isDeleted = $this->isDeleted($username);
+
+        /**
          * Filter Credentials
          * 
          * withError
@@ -95,14 +102,21 @@ class LoginController extends Controller
             /**
              * If Email not found
              */
-            return redirect()->back()->withErrors(['username' => 'Email tidak di temukan'])->withInput();
+            return redirect()->back()->withErrors(['username' => 'Email tidak di temukan']);
             
         } else if($getByUsername == false AND $isEmail == false)
         {
             /**
              * If Username notfound
              */
-            return redirect()->back()->withErrors(['username' => 'Username tidak di temukan'])->withInput();
+            return redirect()->back()->withErrors(['username' => 'Username tidak di temukan']);
+
+        } else if($isDeleted == true)
+        {
+            /**
+             * If deleted_at is not null
+             */
+            return redirect()->back()->withErrors(['error' => 'Yahhh, akun kamu dihapus nih. Hubungi admin yuk untuk info lengkapnya'])->withInput();
 
         } else if($userStatus['status'] != true)
         {
@@ -221,5 +235,27 @@ class LoginController extends Controller
             ];
                 break;
         }
+    }
+
+    /**
+     * Check Account is deleted
+     * 
+     * @return bool
+     */
+    private function isDeleted($username)
+    {
+        /**
+         * Get account data
+         */
+        $userAccount = User::where('username', $username)
+        ->first();
+
+        if($userAccount['deleted_at'] != null)
+        {
+            return true;
+        }
+
+        return false;
+
     }
 }

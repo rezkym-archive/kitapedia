@@ -162,6 +162,10 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+        /* Datatables */
+        Yajra\Datatables\DatatablesServiceProvider::class,
+
+
         /*
          * Package Service Providers...
          */
@@ -189,7 +193,10 @@ return [
     */
 
     'aliases' => [
-
+        
+        /* Datatables */
+        'Datatables' => Yajra\Datatables\Facades\Datatables::class,
+        
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,

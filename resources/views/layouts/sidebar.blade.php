@@ -9,21 +9,21 @@
         <ul class="sidebar-menu ">
 
             {{-- Global Dashboard --}}
-            @if ($user->role == 'admin')
+            @if (auth()->user()->role == 'admin')
                 <li class="menu-header"> Utama </li>
-                <li class="dropdown {{ setActive(['admin*', 'penjualan*']) }}">
+                <li class="dropdown {{ setActive('admin') }}">
                     <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span> Beranda </span></a>
                     <ul class="dropdown-menu">
-                        <li class="{{ setActive(['admin*', 'penjualan*']) }}"><a class="nav-link" href="{{ route('admin.index') }}"> Umum </a></li>
-                        {{-- <li><a class="nav-link" href="javascript:void(0);"> Penjualan [BETA] </a></li> --}}
+                        <li class="{{ setActive('admin') }}"><a class="nav-link" href="{{ route('admin.index') }}"> Umum </a></li>
+                        {{-- <li><a class="nav-link {{ setActive('admin/penjualan') }}" href="javascript:void(0);"> Penjualan [BETA] </a></li> --}}
                     </ul>
                 </li>
             @else
-                <li><a class="nav-link" href="{{ route($user->role.'.index') }}"><i class="fas fa-th"></i> <span> Beranda </span></a></li>
+                <li><a class="nav-link" href="{{ route(auth()->user()->role.'.index') }}"><i class="fas fa-th"></i> <span> Beranda </span></a></li>
             @endif
 
             {{-- Admin Fitur --}}
-            @if ($user->role == 'admin')
+            @if (auth()->user()->role == 'admin')
                 @include('layouts.fiture.admin')
 
             @endif

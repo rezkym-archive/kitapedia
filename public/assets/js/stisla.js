@@ -1,4 +1,14 @@
 "use strict";
+/*  */
+/* Alert console mode */
+console.log(
+  "%cStopp!!!!",
+  "color:red;font-family:system-ui;font-size:4rem;-webkit-text-stroke: 1px black;font-weight:bold"
+);
+console.log(
+  '%cConsole ini hanya digunakan oleh pengembang, apabila terdapat pihak yang meminta anda untuk memasukkan kode itu adalah PHISING',
+  'color:black;font-weight:bold;font-size:1rem;'
+  );
 
 (function($, window, i) {
   // Bootstrap 4 Modal

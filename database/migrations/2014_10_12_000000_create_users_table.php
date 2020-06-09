@@ -28,6 +28,7 @@ class CreateUsersTable extends Migration
             $table->enum('status', ['active', 'nonactive', 'suspended', 'deleted'])->default('nonactive');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletesTz('deleted_at', 0);	
         });
     }
 

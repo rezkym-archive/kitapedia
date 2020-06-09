@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use DataTables as DataTables;
+use App\User;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -38,14 +41,24 @@ Auth::routes();
 
 /* Admin Routes */
 Route::group([
-    'middleware'    => ['auth', 'role:admin'], 
+    'middleware'    => ['auth', 'role:admin', 'isDelete'], 
     'prefix'        => 'admin',
     'namespace'     => 'Admin',
     'as'            => 'admin.',
 ], function () {
     Route::resource('/', 'HomeController');
-    Route::resource('/user', 'UserController@index');
+    Route::resource('/manager/user', 'UserManagerController');
+
+    /**
+     * Recyle route
+     * result is admin.user.recyle
+     */
+    Route::get('/manager/user/recyle', 'UserManagerController@recyle')->name('user.recyle');
+
+    /* Soft Delete */
+    Route::get('/manager/user/softDelete/{id}', 'UserManagerController@softDelete');
 }); 
+
 
 
 /* Reseller Routes */
