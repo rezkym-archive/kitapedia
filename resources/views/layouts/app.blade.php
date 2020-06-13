@@ -78,6 +78,7 @@
 
             </div>
         </div>
+        
 
         <!-- General JS Scripts -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
@@ -90,6 +91,15 @@
         
         <script src="{{ asset('assets/js/stisla.js') }}"></script>
 
+        <!-- Custom javascript in html -->
+        <script type="text/javascript">
+            /* ToolTip Function */
+            $('[data-toggle="tooltip"]').tooltip();
+        </script>
+
+        <!-- Template JS File -->
+        <script src="{{ asset('assets/js/scripts.js') }}"></script>
+
         <!-- JS Libraies -->
         @stack('js_lib')
 
@@ -99,9 +109,7 @@
         <!-- Javascript in HTML Code -->
         @stack('js_html')
 
-        <!-- Template JS File -->
-        <script src="{{ asset('assets/js/scripts.js') }}"></script>
-        <script src="{{ asset('assets/js/custom.js') }}"></script>
+        
     </body>
 
 </html>

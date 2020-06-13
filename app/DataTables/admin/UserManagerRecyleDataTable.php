@@ -6,6 +6,7 @@ namespace App\DataTables\admin;
 use App\User;
 use App\currencyIDR;
 use App\admin\UserManager;
+use Carbon\Carbon;
 
 /* Yajra package */
 use Yajra\DataTables\Html\Button;
@@ -14,7 +15,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class UserManagerDatatable extends DataTable
+class UserManagerRecyleDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -33,21 +34,50 @@ class UserManagerDatatable extends DataTable
             {
                 $query->orderBy('role', $order);
 
-            })->editColumn('balance', function(UserManager $user) 
+            })->editColumn('deleted_at', function(UserManager $user) 
             {
-                return 'Rp' .currencyIDR::beCalculated($user->balance);
+                /**
+                 * Set the date time in Indonesian format
+                 */
+                Carbon::setLocale('id');
 
+                /**
+                 * Change the time date format
+                 */
+                return Carbon::parse($user->deleted_at)->translatedFormat('l, d F Y H:i');
+
+            })->addColumn('action', function($user)
+            {
+                /**
+                 * Add action button in users table
+                 */
+                $actionButton = 
+                '
+                    <div class="dropdown d-inline rounded">
+                        <button class="btn btn-primary btn-sm dropdown-toggle mb-1" type="button" id="'.$user->id.'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Aksi
+                        </button>
+                        <div class="dropdown-menu">
+
+                            <!-- Info User -->
+                            <a class="dropdown-item has-icon" id="'.$user->id.'" href="javascript:void(0);"><i class="fa fa-info"></i> Info </a>
+
+                            <!-- Restore User -->
+                            <a class="dropdown-item has-icon restore" id="'.$user->id.'" user-name="'.$user->name.'" href="javascript:void(0);"><i class="fa fa-undo"></i> Pulihkan akun </a>
+
+                            <!-- Permanently Delete -->
+                            <a class="dropdown-item has-icon delete" id="'.$user->id.'" user-name="'.$user->name.'" href="javascript:void(0);"><i class="fa fa-user-slash"></i> Hapus selamanya </a>
+                        </div>
+                    </div>
+                ';
+
+                /**
+                 * Add to column
+                 * 
+                 * @return string
+                 */
+                return $actionButton;
             })
-            /**
-             * Add column status
-             */
-            ->editColumn('status', 'admin.datatables.user_manager_status')
-
-            /**
-             * Add column action
-             */
-            ->addColumn('action', 'admin.datatables.user_manager_action')
-            
             /**
              * Raw the data HTML
              */
@@ -60,9 +90,12 @@ class UserManagerDatatable extends DataTable
      * @param \App\admin/UserManager $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(UserManager $model)
+    public function query(UserManager $model)   
     {
-        
+        /**
+         * Get users on delete_at is not null
+         */
+        $model = UserManager::onlyTrashed();
         return $model->newQuery();
     }
 
@@ -74,7 +107,7 @@ class UserManagerDatatable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('User-Manager-Table')
+                    ->setTableId('User-Manager-recyle-Table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->parameters([
@@ -121,17 +154,10 @@ class UserManagerDatatable extends DataTable
             Column::make('email')
             ->title('Email'),
 
-            /* Print role */
-            Column::make('role')
-            ->title('Level'),
+            /* Print deleted_at */
+            Column::make('deleted_at')
+            ->title('Dihapus pada'),
 
-            /* Print Balance */
-            Column::make('balance')
-            ->title('Saldo'),
-
-            /* Print status */
-            Column::make('status')
-            ->title('Status'),
 
             /* Print action */
             Column::computed('action'),

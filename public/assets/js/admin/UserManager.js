@@ -13,9 +13,34 @@ $(document).ready(function(){
         });
 
     });
+
+    /**
+     * Show modal info user
+     * 
+     * trigger with class
+     */
+    $(document).on('click', '.info', function(){
+        var id = $(this).attr('id');
+		$.ajax({
+			url :"/admin/manager/user/"+id+"/edit",
+			dataType:"json",
+			success:function(data)
+			{
+				$('#user-info-name').text(data.result.name);
+				$('#user-info-username').text(data.result.username);
+				$('#user-info-nohp').text(data.result.nohp);
+				$('#user-info-email').text(data.result.email);
+				$('#info-user-modal').modal('show');
+			}
+		})
+        
+        
+    });`    `
     
     /**
      * Show modal user input
+     * 
+     * trigger with id
      */
     $('#create_record').click(function(){
 
@@ -27,21 +52,12 @@ $(document).ready(function(){
 
     /**
      * Process modal user input
+     * 
+     * trigger with id
      */
     $('#add_form').on('submit', function(event){
     event.preventDefault();
     var action_url = '';
-
-    if($('#action').val() == 'Add')
-    {
-        action_url = "{{ route('admin.user.store') }}";
-    }
-
-    /* $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    }); */
 
     $.ajax({
         url: action_url,
@@ -63,31 +79,66 @@ $(document).ready(function(){
                     html += '<p>' + data.errors[count] + '</p>';
                 }
                 html += '</div>';
+
+                
             }
             if(data.success)
             {
-                $('#formModal').modal('hide');
+                /**
+                 * Close Modal
+                 */
+                $('#user-input-modal').modal('hide');
 
+                /**
+                 * Success notification
+                 */
                 iziToast.success({
-                    title: 'Berhasil',
+                    title: 'Berhasil!',
                     message: data.userData + ' Berhasil ditambahkan',
                     position: 'topRight'
                 });
-                console.log(data.userData);
 
+                /**
+                 * Reset form input
+                 */
                 $('#add_form')[0].reset();
+
+                /**
+                 * Reload Table
+                 */
                 $('#User-Manager-Table').DataTable().ajax.reload();
                 /* console.log('sukses'); */
             } else 
             {
-                console.log('Error')
+                
+                $('#form_result').html(html);
             }
-            $('#form_result').html(html);
-
+            
         }
     }).done(function(res){
-        $('#action_button').text('Yes');
+        
+        /**
+         * Success run the ajax
+         */
+        $('#action_button').text('Selanjutnya');
         $('#action_button').attr('disabled', false);
+
+    }).fail(function(res){
+
+        /**
+         * Close Modal
+         */
+        $('#user-input-modal').modal('hide');
+
+        /**
+         * Error notification
+         */
+        iziToast.error({
+            title: 'Gagal!',
+            message: 'Kesalahan sistem, hubungi tim bantuan pengembang!',
+            position: 'topRight'
+        });
+
     });
 });
 
@@ -131,7 +182,7 @@ $('#ok_button').click(function(){
     /* Check deleting type */
     if($('#ok_button').val() == 'permanentDelete')
     {
-        url_ajax = 'user/'+user_id;
+        url_ajax    = 'user/'+user_id;
         method      = 'POST';
         _m          = 'DELETE';
         message     = name + ' dihapus selamanya';

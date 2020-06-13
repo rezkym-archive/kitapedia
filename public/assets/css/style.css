@@ -952,6 +952,7 @@ table tr:hover .table-links {
   .table-responsive table {
     min-width: 800px; } }
 /* 3.7 Tooltip */
+
 .tooltip {
   font-size: 12px; }
 

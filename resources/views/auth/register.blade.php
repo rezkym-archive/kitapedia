@@ -127,7 +127,7 @@
             </div>
         </div>
         <div class="simple-footer">
-            Copyright &copy; GazzPay {{ date('Y') }} with Stisla 2018 template
+            Copyright &copy; {{ env('APP_NAME') }} {{ date('Y') }} with Stisla template
         </div>
         </div>
     </div>

@@ -81,7 +81,7 @@
                                     </a>
 
                                     <a class="dropdown-item has-icon" href="{{ route('admin.user.recyle') }}">
-                                        <i class="fa fa-recycle"></i> Recycle 
+                                        <i class="fa fa-recycle"></i> Tong Sampah 
                                     </a>
 
                                 </div>
@@ -90,8 +90,8 @@
                         </div>
 
                             <div class="card-body">
-                                <h2 class="text-center"> 412 </h2>
-                                <div class="mt-2 text-center font-weight"> <span class="badge badge-info"> Total Pengguna </span> </div>
+                                <h2 class="text-center"> {{ $totalUser }} </h2>
+                                <div class="mt-2 text-center font-weight"> <span class="badge badge-info" data-toggle="tooltip" title="Perhitungan recyle tidak termasuk" > Total Pengguna </span> </div>
                             </div>
                             
                         </div>
@@ -122,6 +122,93 @@
 
 {{-- Modal Section --}}
 @section('modal')
+
+    {{-- Modal info uer --}}
+    <div class="modal fade" tabindex="-1" role="dialog" id="info-user-modal" >
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title"> Info Pengguna </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                </div>
+
+                <div class="modal-body">
+
+                    {{-- Info Pengguna --}}
+                    <div class="col-lg-12">
+
+                        <div class="card">
+                            <div class="card-body">
+                                <ul class="nav nav-pills" id="myTab3" role="tablist">
+                                    <li class="nav-item"> 
+                                        <a class="nav-link active" id="home-tab3" data-toggle="tab" href="#home3" role="tab" aria-controls="home" aria-selected="true">
+                                            Umum
+                                        </a> 
+                                    </li>
+
+                                    <li class="nav-item"> 
+                                        <a class="nav-link" id="profile-tab3" data-toggle="tab" href="#profile3" role="tab" aria-controls="profile" aria-selected="false">
+                                            Akun
+                                        </a> 
+                                    </li>
+
+                                    <li class="nav-item"> 
+                                        <a class="nav-link" id="contact-tab3" data-toggle="tab" href="#contact3" role="tab" aria-controls="contact" aria-selected="false">
+                                            API
+                                        </a> 
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="myTabContent2">
+                                    <div class="tab-pane fade show active" id="home3" role="tabpanel" aria-labelledby="home-tab3">
+
+                                        <table class="table table-sm table-dark table-bordered table-striped">
+                                            <thead>
+                                            </thead>
+                                            <tbody>
+
+                                                <tr>
+                                                    <th> Nama </th>
+                                                    <td id="user-info-name"> Undefined </td>
+                                                </tr>
+                                                <tr>
+                                                    <th> Username </th>
+                                                    <td id="user-info-username"> Undefined </td>
+                                                </tr>
+                                                <tr>
+                                                    <th> No Hp </th>
+                                                    <td id="user-info-nohp"> Undefined </td>
+                                                </tr>
+                                                <tr>
+                                                    <th> Email </th>
+                                                    <td id="user-info-email"> Undefined </td>
+                                                </tr>
+                                                
+                                            </tbody>
+                                        </table>
+                                        
+
+                                    </div>
+                                    <div class="tab-pane fade" id="profile3" role="tabpanel" aria-labelledby="profile-tab3"> Sed sed metus vel lacus hendrerit tempus. Sed efficitur velit tortor, ac efficitur est lobortis quis. Nullam lacinia metus erat, sed fermentum justo rutrum ultrices. Proin quis iaculis tellus. Etiam ac vehicula eros, pharetra consectetur dui. </div>
+                                    <div class="tab-pane fade" id="contact3" role="tabpanel" aria-labelledby="contact-tab3"> Vestibulum imperdiet odio sed neque ultricies, ut dapibus mi maximus. Proin ligula massa, gravida in lacinia efficitur, hendrerit eget mauris. Pellentesque fermentum, sem interdum molestie finibus, nulla diam varius leo, nec varius lectus elit id dolor. </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer bg-whitesmoke br">
+
+                        <button type="button" class="btn btn-danger" name="kk" id="kk"> Selesai </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"> Batalkan </button>
+                        
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
     {{-- Modal input user --}}
     <div class="modal fade" tabindex="-1" role="dialog" id="user-input-modal">
@@ -273,7 +360,6 @@
     {{-- General Script --}}
     <script type="text/javascript">
 
-        
     </script>
 
 @endpush

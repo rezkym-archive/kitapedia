@@ -55,13 +55,15 @@ class HomeController extends Controller
          * @return array
          */
         $totalSales = $this->sales();
-
+        
         /**
          * Status Transaction
          * 
          * @return array
          */
-        $transactionStatus = self::orderStatus();
+        $transactionStatus = self::allOrderStatus();
+        $sosmedStatus = self::orderStatusProduct('sosmed');
+        $ppobStatus = self::orderStatusProduct('ppob');
         
         /**
          * Chart transaction
@@ -94,7 +96,7 @@ class HomeController extends Controller
             'user'              => $dataUser,
             'transactionUser'   => $transaction,
             'totalSales'        => $totalSales,
-            'trxStatus'         => $transactionStatus,
+            'trxStatus'         => array_merge($transactionStatus, $sosmedStatus, $ppobStatus),
             'transactionChart'  => $transactionChart,
 
         ]);
@@ -152,7 +154,7 @@ class HomeController extends Controller
      * 
      * @return array
      */
-    private static function orderStatus()
+    private static function allOrderStatus()
     {
             /**
              * Sum Status PPOB and Sosmed
@@ -184,6 +186,65 @@ class HomeController extends Controller
              */
             return $transaction;
 
+    }
+
+    /**
+     * Status Order per Product
+     * 
+     * @return array
+     */
+    private static function orderStatusProduct($type)
+    {
+        if($type == 'sosmed')
+        {
+            /**
+             * Count data from database
+             */
+            $trxSosmed = DB::table('transaction_sosmed')
+            ->select('status', DB::raw('count(*) as count'))
+            ->groupBy('status')
+            ->get();
+
+            /**
+             * Manipulation to arrays
+             */
+            $trxSosmed = [$trxSosmed];
+
+            /**
+             * Return in an array state
+             * 
+             * @return array
+             */
+            return $trxSosmed;
+
+        } else if($type == 'ppob')
+        {
+            /**
+             * Count data from database
+             */
+            $trxPPOB = DB::table('transaction_ppob')
+            ->select('status', DB::raw('count(*) as count'))
+            ->groupBy('status')
+            ->get();
+
+            /**
+             * Manipulation to arrays
+             */
+            $trxPPOB = [$trxPPOB];
+
+            /**
+             * Return in an array state
+             * 
+             * @return array
+             */
+            return $trxPPOB;
+
+        }
+
+        /**
+         * Returns an error of 500 if no type is found
+         */
+        abort(500, 'ADM-HM-C:abort_status_product');
     }
 
     /**

@@ -290,8 +290,8 @@ $(function() {
   });
 
   // tooltip
-  $("[data-toggle='tooltip']").tooltip();
-
+  $('[data-toggle="tooltip"]').tooltip();
+  
   // popover
   $('[data-toggle="popover"]').popover({
     container: 'body'

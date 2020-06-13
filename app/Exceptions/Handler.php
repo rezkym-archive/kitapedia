@@ -53,15 +53,17 @@ class Handler extends ExceptionHandler
         /**
          * Custome abort error view
          */
-        if ($this->isHttpException($exception)) {
+        /* if ($this->isHttpException($exception)) {
             if (view()->exists('errors.' . $exception->getStatusCode())) {
                 return response()->view('errors.' . $exception->getStatusCode(), [], $exception->getStatusCode());
             }
-        }
+        } */
      
         /**
          * Default return to render
          */
         return parent::render($request, $exception);
+
+        
     }
 }

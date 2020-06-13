@@ -43,13 +43,17 @@
                               </div>
                         </div>
                         
+                            
                             <div class="row">
+
+                                <!-- All sales -->
                                 <div class="col-lg-4 col-md-4 col-sm-12">
                                     <div class="card card-statistic-2">
                                         <div class="card-stats">
                                             <div class="card-stats-title"> 
-                                                Penjualan 
+                                                Semua Penjualan
                                             </div>
+
                                             <div class="card-stats-items">
                                                 
                                                 @foreach ($trxStatus[0] as $status => $val)
@@ -62,6 +66,7 @@
                                                 @endforeach
                                                 
                                             </div>
+
                                         </div>
                                         <div class="card-icon shadow-primary bg-primary"> <i class="fas fa-archive"></i> </div>
                                         <div class="card-wrap">
@@ -71,37 +76,71 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Sosmed sales -->
                                 <div class="col-lg-4 col-md-4 col-sm-12">
                                     <div class="card card-statistic-2">
-                                        <div class="card-chart">
-                                            <canvas id="balance-chart" height="80"></canvas>
+                                        <div class="card-stats">
+                                            <div class="card-stats-title"> 
+                                                Penjualan Sosmed
+                                            </div>
+        
+                                            <div class="card-stats-items">
+
+                                                @foreach ($trxStatus[1] as $item)
+
+                                                    <div class="card-stats-item">
+                                                        <div class="card-stats-item-count"> {{ isset($item->count) ? $item->count : 0 }} </div>
+                                                        <div class="card-stats-item-label"> {{ isset($item->status) ? $item->status : 'unknown' }} </div>
+                                                    </div>
+
+                                                @endforeach
+                                                
+                                            </div>
+
                                         </div>
-                                        <div class="card-icon shadow-primary bg-primary"> <i class="fas fa-shopping-bag"></i> </div>
+                                        <div class="card-icon shadow-primary bg-primary"> <i class="fas fa-archive"></i> </div>
                                         <div class="card-wrap">
                                             <div class="card-header">
-                                                <h4> Sosmed </h4> </div>
+                                                <h4> Pendapatan </h4> </div>
                                             <div class="card-body"> {{ $totalSales['sosmedSales'] }} </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- PPOB Sales -->
                                 <div class="col-lg-4 col-md-4 col-sm-12">
                                     <div class="card card-statistic-2">
-                                        <div class="card-chart">
-                                            <canvas id="sales-chart" height="80"></canvas>
-                                        </div>
-                                        <div class="card-icon shadow-primary bg-primary"> <i class="fas fa-shopping-bag"></i> </div>
-                                        <div class="card-wrap">
-                                            <div class="card-header">
-                                                <h4> PPOB </h4> 
+                                        <div class="card-stats">
+                                            <div class="card-stats-title"> 
+                                                Penjualan PPOB
                                             </div>
 
-                                            <div class="card-body"> 
-                                                {{ $totalSales['ppobSales'] }}
+                                            <div class="card-stats-items">
+                                                
+                                                @foreach ($trxStatus[2] as $item)
+
+                                                    <div class="card-stats-item">
+                                                        <div class="card-stats-item-count"> {{ isset($item->count) ? $item->count : 0 }} </div>
+                                                        <div class="card-stats-item-label"> {{ isset($item->status) ? $item->status : 'unknown' }} </div>
+                                                    </div>
+
+                                                @endforeach
+                                                
                                             </div>
+
+                                        </div>
+                                        <div class="card-icon shadow-primary bg-primary"> <i class="fas fa-archive"></i> </div>
+                                        <div class="card-wrap">
+                                            <div class="card-header">
+                                                <h4> Pendapatan </h4> </div>
+                                            <div class="card-body"> {{ $totalSales['ppobSales'] }} </div>
                                         </div>
                                     </div>
                                 </div>
+                                
                             </div>
+
                             <div class="row">
                                 <div class="col-lg-8">
                                     <div class="card">
@@ -190,213 +229,5 @@
 
                 <!-- Chart script -->
                 {!! $transactionChart->script() !!}
-    
-                <script type="text/javascript">
-                    "use strict";
 
-                        /* var ctx = document.getElementById("salesChart").getContext('2d');
-                        var myChart = new Chart(ctx, {
-                            type: 'line',
-                            data: {
-                                labels: ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'],
-                                datasets: [{
-                                    label: 'PPOB',
-                                    fill: true,
-                                    backgroundColor: 'rgb(30, 227, 207, 0.1)',
-                                    borderColor: 'rgb(30, 227, 207)',
-                                    pointRadius: 3.5,
-                                    pointBackgroundColor: 'transparent',
-                                    pointHoverBackgroundColor: 'rgba(30, 227, 207, .8)',
-                                    data: [
-                                        24,
-                                        31,
-                                        15,
-                                        18,
-                                        20,
-                                        10,
-                                        40
-                                    ]
-                                }, 
-                                {
-                                    label: 'SOSMED',
-                                    fill: true,
-                                    backgroundColor: 'rgb(255, 99, 132, 0.1)',
-                                    borderColor: 'rgb(255, 99, 132)',
-                                    pointRadius: 3.5,
-                                    pointBackgroundColor: 'transparent',
-                                    pointHoverBackgroundColor: 'rgba(255, 99, 132, .8)',
-                                    data: [
-                                        10,
-                                        14,
-                                        18,
-                                        17,
-                                        21,
-                                        24,
-                                        13
-                                    ],
-                                }],
-                            },
-                            options: {
-                                legend: {
-                                    display: true
-                                },
-                                scales: {
-                                    yAxes: [{
-                                        stacked: false,
-                                        gridLines: 
-                                        {
-                                            display: true,
-                                            drawBorder: true,
-                                            color: '#f2f2f2',
-                                        },
-                                        ticks: {
-                                            beginAtZero: true,
-                                        }
-                                    }],
-                                    xAxes: [{
-                                        gridLines: {
-                                            display: true,
-                                            tickMarkLength: 15,
-                                        }
-                                    }]
-                            },
-                        }
-                    }); */
-
-
-                    var balance_chart = document.getElementById("balance-chart").getContext('2d');
-
-                    var balance_chart_bg_color = balance_chart.createLinearGradient(0, 0, 0, 70);
-                    balance_chart_bg_color.addColorStop(0, 'rgba(63,82,227,.2)');
-                    balance_chart_bg_color.addColorStop(1, 'rgba(63,82,227,0)');
-
-                    var salesChart = new Chart(balance_chart, {
-                    type: 'line',
-                    data: {
-                        labels: ['16-07', '17-07', '18-07', '19-07', '20-07', '21-07', '22-07', '23-07', '24-07', '25-07', '26-07', '27-07', '28-07', '29-07', '30-07', '31-07'],
-                        datasets: [{
-                        label: 'Balance',
-                        data: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
-                        backgroundColor: balance_chart_bg_color,
-                        borderWidth: 3,
-                        borderColor: 'rgba(63,82,227,1)',
-                        pointBorderWidth: 0,
-                        pointBorderColor: 'transparent',
-                        pointRadius: 3,
-                        pointBackgroundColor: 'transparent',
-                        pointHoverBackgroundColor: 'rgba(63,82,227,1)',
-                        }]
-                    },
-                    options: {
-                        layout: {
-                        padding: {
-                            bottom: -1,
-                            left: -1
-                        }
-                        },
-                        legend: {
-                        display: false
-                        },
-                        scales: {
-                        yAxes: [{
-                            gridLines: {
-                            display: false,
-                            drawBorder: false,
-                            },
-                            ticks: {
-                            beginAtZero: true,
-                            display: false
-                            }
-                        }],
-                        xAxes: [{
-                            gridLines: {
-                            drawBorder: false,
-                            display: false,
-                            },
-                            ticks: {
-                            display: false
-                            }
-                        }]
-                        },
-                    }
-                    });
-
-                    var sales_chart = document.getElementById("sales-chart").getContext('2d');
-
-                    var sales_chart_bg_color = sales_chart.createLinearGradient(0, 0, 0, 80);
-                    balance_chart_bg_color.addColorStop(0, 'rgba(63,82,227,.2)');
-                    balance_chart_bg_color.addColorStop(1, 'rgba(63,82,227,0)');
-
-                    var salesChart = new Chart(sales_chart, {
-                    type: 'line',
-                    data: {
-                        labels: ['16-07', '17-07', '18-07', '19-07', '20-07', '21-07', '22-07', '23-07', '24-07', '25-07', '26-07', '27-07', '28-07', '29-07', '30-07', '31-07'],
-                        datasets: [{
-                        label: 'Sales',
-                        data: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
-                        borderWidth: 2,
-                        backgroundColor: balance_chart_bg_color,
-                        borderWidth: 3,
-                        borderColor: 'rgba(63,82,227,1)',
-                        pointBorderWidth: 0,
-                        pointBorderColor: 'transparent',
-                        pointRadius: 3,
-                        pointBackgroundColor: 'transparent',
-                        pointHoverBackgroundColor: 'rgba(63,82,227,1)',
-                        }]
-                    },
-                    options: {
-                        layout: {
-                        padding: {
-                            bottom: -1,
-                            left: -1
-                        }
-                        },
-                        legend: {
-                        display: false
-                        },
-                        scales: {
-                        yAxes: [{
-                            gridLines: {
-                            display: false,
-                            drawBorder: false,
-                            },
-                            ticks: {
-                            beginAtZero: true,
-                            display: false
-                            }
-                        }],
-                        xAxes: [{
-                            gridLines: {
-                            drawBorder: false,
-                            display: false,
-                            },
-                            ticks: {
-                            display: false
-                            }
-                        }]
-                        },
-                    }
-                    });
-
-                    $("#products-carousel").owlCarousel({
-                    items: 3,
-                    margin: 10,
-                    autoplay: true,
-                    autoplayTimeout: 5000,
-                    loop: true,
-                    responsive: {
-                        0: {
-                        items: 2
-                        },
-                        768: {
-                        items: 2
-                        },
-                        1200: {
-                        items: 3
-                        }
-                    }
-                    });
-
-                </script>
 @endpush

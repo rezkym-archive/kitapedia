@@ -47,16 +47,24 @@ Route::group([
     'as'            => 'admin.',
 ], function () {
     Route::resource('/', 'HomeController');
-    Route::resource('/manager/user', 'UserManagerController');
 
-    /**
-     * Recyle route
-     * result is admin.user.recyle
-     */
-    Route::get('/manager/user/recyle', 'UserManagerController@recyle')->name('user.recyle');
+    /* Manager Route */
+    Route::group(['prefix' => 'manager'], function () {
 
-    /* Soft Delete */
-    Route::get('/manager/user/softDelete/{id}', 'UserManagerController@softDelete');
+        Route::resource('user', 'UserManagerController');
+
+        /* Recyle route */
+        Route::get('recyle/user', 'UserManagerController@recyle')->name('user.recyle');
+        Route::get('recyle/d/user', 'UserManagerController@recyleDelete')->name('user.recyle.delete');
+
+        /* Restore Account */
+        Route::get('restore/user/{id}', 'UserManagerController@restore')->name('user.restore');
+
+        /* Soft Delete */
+        Route::get('user/softDelete/{id}', 'UserManagerController@softDelete')->name('user.softdelete');
+        
+    });
+    
 }); 
 
 
