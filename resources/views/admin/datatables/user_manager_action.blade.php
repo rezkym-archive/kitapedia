@@ -21,8 +21,4 @@
                             <a class="dropdown-item has-icon delete" id="{{ $id }}" user-name="{{ $name }}" href="javascript:void(0);"><i class="fa fa-user-slash"></i> Hapus selamanya </a>
                         </div>
                     </div>
-
-                        {{-- Modal info uer --}}
-                        
-                        
                     
