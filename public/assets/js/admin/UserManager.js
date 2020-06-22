@@ -35,7 +35,7 @@ $(document).ready(function(){
 		})
         
         
-    });`    `
+    });
     
     /**
      * Show modal user input

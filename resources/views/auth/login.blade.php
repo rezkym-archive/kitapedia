@@ -35,9 +35,8 @@
                     @csrf
 
                     <div class="form-group">
-
-                        <label for="username"> Email / Username </label>
-                        <input id="username" type="text" class="form-control" name="username" value="{{ old('username') }}" tabindex="1" required autofocus>
+                        <input id="username" type="text" class="form-control" adaptive="true" name="username" value="{{ old('username') }}" tabindex="1" required autofocus>
+                        <label for="username" placeholder="Username" alt="Username"> </label>
                         
                         {{-- if username/email error --}}
                         @error('username')    
@@ -49,16 +48,16 @@
                     </div>
 
                     <div class="form-group">
-
                         <div class="d-block">
-                            <label for="password" class="control-label"> Kata sandi </label>
                             <div class="float-right">
-                            <a href="javascript:void(0);" class="text-small">
-                                Lupa kata sandi? 
-                            </a>
+                                <a href="javascript:void(0);" class="text-small">
+                                    Lupa kata sandi? 
+                                </a>
                             </div>
                         </div>
-                        <input id="password" type="password" class="form-control" name="password" tabindex="2" required>
+
+                        <input id="password" type="password" class="form-control" adaptive="true" name="password" tabindex="2" required>
+                        <label for="password" placeholder="Kata sandi" alt="Kata sandi"> </label>
 
                         {{-- if password error --}}
                         @error('password')

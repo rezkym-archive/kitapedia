@@ -72,6 +72,7 @@ class UserManagerController extends Controller
         [
             /* Custome */
             'name.required'     => 'Nama tidak boleh kosong',
+            'name.alpha'        => 'Nama tidak boleh menggunakan angka & simbol',
             'nohp.regex'        => 'Nomor telefon tidak di ketahui',
             'level.required'    => 'Level akun tidak boleh kosong',
             'status.required'   => 'Status akun tidak boleh kosong',
@@ -92,7 +93,7 @@ class UserManagerController extends Controller
          * @return array
          */
         $Validation = Validator::make($request->all(), [
-            'name'                      => ['required', 'string', 'min:5', 'max:255'],
+            'name'                      => ['required', 'alpha', 'min:5', 'max:255'],
             'username'                  => ['required', 'string', 'min:4', 'max:35', 'unique:users'],
             'email'                     => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'nohp'                      => ['required', 'string', 'max:15', 'regex:/^(^\+62\s?|^0)(\d{3,4}-?){2}\d{3,4}$/', 'unique:users'],

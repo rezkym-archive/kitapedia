@@ -21,22 +21,38 @@ Route::get('/', function () {
     if(auth()->check()) return redirect('/'.auth()->user()->role);
     return view('/auth/login'); 
 });
+
+/* If already logged in  */
 Route::get('/home', function () {
     if (!auth()->check()) return redirect('/');
     $role = auth()->user()->role;
-    return redirect()->route($role . '.home');
+    return redirect()->route($role . '.index');
 })->name('home');
 
 
 /* Auth Routes */
 Auth::routes();
-/* Route::group([
-    'prefix' => ''
+Route::group([
+    'middleware'    => ['auth', 'isDelete'],
+    'namespace'     => 'User',
+    'prefix'        => 'settings',
+    'as'            => 'settings.'
 ], function () {
-    Route::get('setting', 'Auth\SettingController@index')->name('auth.setting');
-    Route::put('setting', 'Auth\SettingController@update')->name('auth.setting.update');
+
+    Route::resource('/', 'SettingController');
+
+    Route::post('general/{id}', 'SettingController@generalUpdate')->name('general.update');
+    Route::post('security/{id}', 'SettingController@securityUpdate')->name('security.update');
+
+    /* Include */
+    Route::get('general', 'SettingController@general')->name('general');
+    # Route::get('news', 'SettingController@news')->name('news');
+    Route::get('api', 'SettingController@api')->name('api');
+    Route::get('security', 'SettingController@security')->name('security');
+    # Route::get('partnership', 'SettingController@partnership')->name('partnership');
+    # Route::get('finance', 'SettingController@finance')->name('finance');
     
-}); */
+});
 
 
 /* Admin Routes */

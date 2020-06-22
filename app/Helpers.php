@@ -15,6 +15,17 @@ function setActive($path, $active = 'active') {
 	//return call_user_func_array('Request::is', (array)$path) ? $active : '';
 	return request()->is($path) ? $active : '';
 }
+
+/**
+ * Set Active if
+ * 
+ * @author Rezky
+ */
+function setActiveIs($path, $active = 'active')
+{
+	return Request::is($path) ? $active : '';
+}
+
 /*
 function alert($message = null, $title = '') {
     return call_user_func_array('Alert::', $path.';

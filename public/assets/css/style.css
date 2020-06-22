@@ -47,6 +47,7 @@
  * 	  4.4 Layout
  * 	  4.5 Animation
  * 5. Responsive
+      5.1 Adaptive Place Holder
  *
  */
 /* 1. Variable */
@@ -2809,5 +2810,87 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
   100% {
     -webkit-transform: scale(1.2, 1.2);
     opacity: 0.0; } }
+
+/* 5.1 Adaptive Placeholder */
+
+input {
+  /* 1 */
+  font-size: 100%;
+  /* 2 */
+  margin: 0;
+  /* 3 */
+  box-sizing: border-box;
+}
+
+label {
+  box-sizing: border-box;
+}
+
+textarea {
+  overflow: auto;
+  /* 1 */
+  vertical-align: top;
+  /* 2 */
+}
+
+input[adaptive='true'] {
+  background-color: white;
+  height: calc(3em + 2px);
+  padding: 1em;
+  font-size: 1em;
+  border: 1px solid #cccccc;
+  border-radius: .25em;
+  transition: all 0.2s ease-out;
+  box-shadow: none;
+  resize: none;
+  outline: none;
+}
+input[adaptive='true']:hover {
+  border: 1px solid #cccccc;
+}
+input[adaptive='true']:focus, input[adaptive='true']:active {
+  border: 1px solid #339AF0;
+}
+input[adaptive='true']:focus + label:before, input[adaptive='true']:active + label:before {
+  color: #339AF0;
+}
+input[adaptive='true'] + label{
+  display: block;
+  font-size: 1em;
+  height: 3em;
+  line-height: 3em;
+  margin-top: calc(-3em - 1px);
+  margin-bottom: 1em;
+  pointer-events: none;
+}
+input[adaptive='true'] + label:before {
+  content: attr(placeholder);
+  display: inline-block;
+  color: #999999;
+  margin: 0 calc(1em + 2px);
+  white-space: nowrap;
+  transition-property: color, -webkit-transform;
+  transition-property: transform, color;
+  transition-property: transform, color, -webkit-transform;
+  transition-duration: 0.2s;
+  transition-delay: 0;
+  transition-timing-function: ease-out;
+  -webkit-transform-origin: left center;
+  transform-origin: left center;
+}
+input[adaptive='true']:focus + label:before, input[adaptive='true'].active + label:before, input[adaptive='true']:valid + label:before {
+  background: white;
+  line-height: 1;
+  padding: 0 1.5px;
+  -webkit-transform: translateY(calc(-3em / 2 - 1px/2)) scale(0.8, 0.8);
+  transform: translateY(calc(-3em / 2 - 1px/2)) scale(0.8, 0.8);
+}
+input[adaptive='true']:valid {
+  border: 1px solid #23a045;
+}
+input[adaptive='true']:valid + label:before {
+  content: attr(alt);
+  color: #23a045;
+}
 
 /*# sourceMappingURL=style.css.map */

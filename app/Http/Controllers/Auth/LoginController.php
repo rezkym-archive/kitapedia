@@ -250,12 +250,17 @@ class LoginController extends Controller
         $userAccount = User::where('username', $username)
         ->first();
 
-        if($userAccount['deleted_at'] != null)
+        if(isset($userAccount['deleted_at']) && $userAccount['deleted_at'] != null)
         {
             return true;
+
+        } else 
+        {
+            return false;
+
         }
 
-        return false;
+        
 
     }
 }

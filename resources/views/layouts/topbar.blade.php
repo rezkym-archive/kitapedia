@@ -18,7 +18,7 @@
                         <div class="search-icon bg-primary text-white mr-3">
                             <i class="fas fa-laptop"></i>
                         </div>
-                        GazzPay Blog
+                        {{ env('APP_NAME') }} Blog
                     </a>
                 </div>
             </div>
@@ -29,7 +29,7 @@
         <li class="dropdown">
             <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                 <img alt="image" src="{{ asset('assets/img/avatar/avatar-1.png') }}" class="rounded-circle mr-1">
-                <div class="d-sm-none d-lg-inline-block"> Hi, {{ auth()->user()->name }} </div>
+                <div class="d-sm-none d-lg-inline-block profileName"> Hi, {{ auth()->user()->name }} </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-title"> ~ Selamat Datang ~ </div>
@@ -39,7 +39,7 @@
                 <a href="javascript:void(0);" class="dropdown-item has-icon">
                     <i class="fas fa-bolt"></i> Aktifitas
                 </a>
-                <a href="javascript:void(0);" class="dropdown-item has-icon">
+                <a href="{{ route('settings.index') }}" class="dropdown-item has-icon">
                     <i class="fas fa-cog"></i> Pengaturan
                 </a>
                 <div class="dropdown-divider"></div>

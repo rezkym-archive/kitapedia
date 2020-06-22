@@ -189,8 +189,15 @@
                                         
 
                                     </div>
-                                    <div class="tab-pane fade" id="profile3" role="tabpanel" aria-labelledby="profile-tab3"> Sed sed metus vel lacus hendrerit tempus. Sed efficitur velit tortor, ac efficitur est lobortis quis. Nullam lacinia metus erat, sed fermentum justo rutrum ultrices. Proin quis iaculis tellus. Etiam ac vehicula eros, pharetra consectetur dui. </div>
-                                    <div class="tab-pane fade" id="contact3" role="tabpanel" aria-labelledby="contact-tab3"> Vestibulum imperdiet odio sed neque ultricies, ut dapibus mi maximus. Proin ligula massa, gravida in lacinia efficitur, hendrerit eget mauris. Pellentesque fermentum, sem interdum molestie finibus, nulla diam varius leo, nec varius lectus elit id dolor. </div>
+
+                                    <div class="tab-pane fade" id="profile3" role="tabpanel" aria-labelledby="profile-tab3"> 
+                                        Featur is being maintained
+                                    </div>
+
+                                    <div class="tab-pane fade" id="contact3" role="tabpanel" aria-labelledby="contact-tab3"> 
+                                        Featur is being maintained
+                                    </div>
+
                                 </div>
                             </div>
 
@@ -233,12 +240,12 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="name"> Nama </label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Nama"> 
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Nama" required autofocus> 
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label for="username"> Nama Pengguna </label>
-                                <input type="text" class="form-control" id="username" name="username" placeholder="Username / Nama pengguna"> 
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Username / Nama pengguna" required> 
                             </div>
                         </div>
 
@@ -246,12 +253,12 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="email"> Email </label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Alamat Email"> 
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Alamat Email" required> 
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label for="nohp"> No Hp </label>
-                                <input type="text" class="form-control" id="nohp" name="nohp" placeholder="Nomor telefon"> 
+                                <input type="text" class="form-control" id="nohp" name="nohp" placeholder="Nomor telefon" required> 
                             </div>
                         </div>
 
@@ -259,12 +266,12 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="password"> Kata sandi </label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Kata sandi"> 
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Kata sandi" required> 
                             </div>
 
                             <div class="form-group col-md-6">
                                 <label for="password_confirmation"> Konfirmasi kata sandi </label>
-                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Konfirmasi kata sandi"> 
+                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Konfirmasi kata sandi" required> 
                             </div>
                         </div>
 
@@ -273,7 +280,7 @@
 
                             <div class="form-group col-md-4">
                                 <label for="level"> Tipe Akun </label>
-                                <select id="level" name="level" class="form-control">
+                                <select id="level" name="level" class="form-control" required>
                                     <option value="client" selected> Client </option>
                                     <option value="admin"> Admin </option>
                                     <option value="reseller"> Reseller </option>
@@ -283,7 +290,7 @@
 
                             <div class="form-group col-md-4">
                                 <label for="status"> Status </label>
-                                <select id="status" name="status" class="form-control">
+                                <select id="status" name="status" class="form-control" required>
                                     <option value="active" selected> aktif </option>
                                     <option value="active"> aktif </option>
                                     <option value="nonactive"> nonaktif </option>
@@ -300,7 +307,7 @@
                                             Rp
                                         </div>
                                     </div>
-                                    <input type="text" class="form-control currency" id="balance" name="balance" placeholder="Saldo"> 
+                                    <input type="text" class="form-control currency" id="balance" name="balance" placeholder="Saldo" required> 
                                 </div>
                             </div>
                             
